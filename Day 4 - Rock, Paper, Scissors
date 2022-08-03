@@ -27,19 +27,16 @@ scissors = '''
 
 #Write your code below this line 👇
 import random
-
+game_images = [rock, paper, scissors]
 print("Welcome to Rock, Paper, Scissors!")
 Choice = int(input("What do you choose? Type 1 for Rock, 2 for Paper, or 3 for Scissors. "))
 
 Continue = 1
 
 print("Your choice:")
-if Choice == 1:
-  print(rock)
-elif Choice == 2:
-  print(paper)
-elif Choice == 3:
-  print(scissors)
+if Choice > 0 and Choice < 4:
+  print(game_images[Choice-1])
+
 else:
   print("That is not a valid choice.")
   Continue = 0
@@ -50,12 +47,8 @@ if Continue == 0:
 else:
   Computer_Choice = random.randint(0,2)
   print("Computer choice:")
-  if Computer_Choice == 0:
-    print(rock)
-  elif Computer_Choice == 1:
-    print(paper)
-  else:
-    print(scissors)
+  print(game_images[Computer_Choice])
+
 
 if Continue == 0:
   print("Game over.")
