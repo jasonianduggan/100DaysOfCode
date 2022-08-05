@@ -1,0 +1,154 @@
+#Import modules
+import random #Module to inject randomness
+import hangman_words #Module for list of words
+import hangman_art #Module for ascii art
+from os import system, name #Determine the os the program is being run on
+
+#Function to clear screen
+def clear():
+  
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+  
+    # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
+
+#Use word list from hangman_words
+word_list = hangman_words.word_list
+
+#choose random word from list.
+chosen_word = random.choice(word_list)
+
+#Set variables
+end_of_game = False #Switch to break out of while loop
+lives = 6 #Number of lives. Once lives hits 0 game is over
+times_in_word = 0 #If guessed correctly, how many times was the letter in the word
+already_guessed = False #Switch to say if the letter was already guessed or not
+repeat = [] #List to hold guessed letters
+alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"] #List of letters to check the guess against for non-letter characters
+
+#Uncomment to print the chosen word. Used for testing.
+#print(f'Pssst, the solution is {chosen_word}.')
+
+#Create blanks
+display = []
+for _ in chosen_word:
+    display += "_"
+
+#Welcome text
+print("Welcome to Hangman! Can you guess the word? \nIf you guess a wrong letter 6 times, you lose!")
+
+#Print starting hangman
+print(hangman_art.stages[lives])
+
+#print blanks to let user know number of letters
+print(display)
+
+#Main Loop
+#While true the game will continue
+while not end_of_game:
+
+    #Ask user to guess a letter and store it
+    #Stores both original letter entered (such as if a captial letter) as well as letter converted to lower case
+    guessed_letter = input("Guess a letter: ")
+    guess = guessed_letter.lower()    
+    #Check if user has repeated a guess and let them know if they have
+    if guess in repeat:
+      print("You have already guessed that letter.")
+      
+      #Switch to skip the rest of the steps and return to guessing
+      already_guessed = True
+
+    #Check if user entered more than one letter
+    elif len(guess) >= 2:
+      print("Please only guess one letter at a time.\n")
+      already_guessed = True
+
+    #Check if user didn't enter anything
+    elif len(guess) < 1:
+      print("Please enter a letter to guess.\n")
+      already_guessed = True
+
+    #Check if user entered in non-letter character
+    elif guess not in alphabet:
+      print("Please only guess letters.\n")
+      already_guessed = True
+      
+    #If guessed letter isn't a repeated one, check it against the word    
+    if already_guessed == False:
+
+      #Variable for moving through display list
+      i = 0
+      
+      #Check if guessed letter is in the chosen word
+      for letter in chosen_word:
+        
+        #If uncommented, will list position that is being checked
+        #Used for troubleshooting
+        #print(f"Current position: {i}\n Current letter: {letter}\n Guessed letter: {guess}")
+        
+        #Check each letter in the chosen word against the guessed letter
+        if letter == guess:
+          
+          #If letter is in chosen word, replace the blank in the correct spot with the letter
+          display[i] = letter
+          
+          #Counter to determine how many times the letter is in the word
+          times_in_word += 1
+        
+        #Increment variable to step through display list
+        i += 1 
+
+
+      #Clear the screen to keep things tidy
+      clear()
+
+      
+      #If letter is guessed correctly, let the user know.  
+      if times_in_word > 0:
+        
+        #If/else due to grammer of singular vs plural
+        if times_in_word == 1:
+          print(f"Correct! \n{guess} is in the word {times_in_word} time.")
+        else:
+          print(f"Correct! \n{guess} is in the word {times_in_word} times.") 
+  
+      #Check if user is wrong, let them know, and remove a life.
+      if guess not in chosen_word:
+
+        #Decrement lives variable
+        lives -= 1
+        
+        #If/else due to grammer of singular vs plural
+        if lives == 1:
+          print(f"Sorry. {guess} is not in the word. \nYou can guess wrong {lives} more time. Better make it count!")
+        else:
+          print(f"Sorry. {guess} is not in the word. \nYou can guess wrong {lives} more times.")
+
+      #Show ascii art corresponding to the number of lives they have
+      print(hangman_art.stages[lives])
+      
+      #Show current progress to guessing the correct word
+      print(display)
+    
+    #Add currently guessed letter to list of already guessed words
+    repeat += guess
+    
+    #Reset repeat guess check
+    already_guessed = False
+    
+    #Reset count of times guessed letter is in word
+    times_in_word = 0
+
+    #If no more blanks remain, user wins
+    if "_" not in display:
+        end_of_game = True
+        print(f"\nYou have correctly guessed the word {chosen_word} \nCongratulations! \nYou win!\n")    
+
+    
+    #If lives hit 0, user loses
+    if lives == 0:
+      end_of_game = True
+      print(f"\nSorry but the correct word was {chosen_word} \nBetter luck next time!.")
