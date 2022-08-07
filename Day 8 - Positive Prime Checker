@@ -1,0 +1,28 @@
+def prime_checker(number):
+  i = 2
+  Break = False
+  remainder = 0
+  
+  while i < number and Break == False:
+    remainder = number % i
+    if remainder == 0:
+      Break = True
+
+    i += 1
+
+  if Break == False:
+    print(f"{number} is prime.")
+
+try_again = True
+while try_again == True:
+  n = int(input("Please enter a positive whole number as the upper bound to check for primes: "))
+  if n == 0:
+    print("\n0 is neither prime nor composite.\nPlease try again.\n")
+  if n < 0:  
+    print("\nPlease enter a positive number.\nPlease try again.\n")
+  if n == 1:
+    print("\n1 is not a prime number. A prime number must only be divisible by two different numbers: 1 and itself. 1 is only divisible by itself and does not satisfy the 'two differnt numbers' portion.\nPlease try again.\n")
+  
+  for z in range (2, n+1):
+    prime_checker(number=z)
+    try_again = False
