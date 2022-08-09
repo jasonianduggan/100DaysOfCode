@@ -1,0 +1,81 @@
+from art import logo
+
+#Setting up variables
+More_People = True  #Tracker if while loop should continue to collect name/bids
+auction = []        #For storing key/value pairs of name/bids
+list_of_bids = []   #For storing only the bids
+winner = []         #For storing the winning key/value pair of this highest bid
+
+#Function to clear screen
+def clear():
+
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+
+    # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
+
+
+
+#Loop through to get all people and their bids
+while More_People:
+  print(logo)
+  print("Welcome to the secret auction program.")
+  
+  #Get person's name and store in variable
+  name = input("What is your name?: ")
+  
+  #Get person's bid and store in variable
+  bid = int(input("What is your bid?: $"))
+  
+  #Create dictionary of key/value pair
+  call = {name: bid}
+  
+  #Store key/value pairs in list for retrevial
+  auction.append(call)
+  
+  #Check if more people
+  more_bidders = input("are there any other bidders? Type yes or no.\n")
+
+  #Clear screen and keep looping if yes. If no, stop loop.
+  if more_bidders == "yes" or more_bidders == "ye" or more_bidders == "y":
+    clear()
+  else:
+    More_People = False
+
+#Pull out all the bids
+i = 0
+while i < len(auction):
+  list_of_bids += list(auction[i].values())
+  i += 1
+
+#Get the max bid
+max_bid = max(list_of_bids)
+
+#Compare the max bid to the list of bids and pull out the winner.
+i = 0
+while i < len(auction):
+
+  #Grabs the bid and puts in variable
+  check = list(auction[i].values())
+  
+  #Checks if it's the max one. If not, loops and checks the next one.
+  if max_bid == check[0]:
+    
+    #If max bid, grab the name and bid from the key/value pair
+    winner += (list(auction[i].keys()))
+    winning_bid = list(auction[i].values())
+  i += 1
+
+#Clears screen so last bid isn't seen.
+clear()
+
+#Checks if multiple people bid the same. If so, print both names. If not, just print the single winner.
+if len(winner) == 1:
+  print(f"The winner is {winner[0]} with a bid of ${winning_bid[0]}")
+else:
+  winners = " and ".join(str(e) for e in winner)
+  print(f"The winners are {winners} with a bid of ${winning_bid[0]}")
+
